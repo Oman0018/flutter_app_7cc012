@@ -1,8 +1,9 @@
-//lib/screens/message_detail_screen.dart
+// lib/screens/message_detail_screen.dart
 import 'package:flutter/material.dart';
 import '../models/message.dart';
 import '../helpers/database_helper.dart';
 import '../services/share_service.dart';
+import 'home_screen.dart'; // ✅ Added import for HomeScreen
 
 class MessageDetailScreen extends StatelessWidget {
   final Message message;
@@ -14,27 +15,44 @@ class MessageDetailScreen extends StatelessWidget {
     Navigator.pop(context);
   }
 
+  void _returnHome(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Message Details')),
+      appBar: AppBar(
+        title: const Text('Message Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () => _returnHome(context), // ✅ Home button added
+            tooltip: 'Return to Home',
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Text: ${message.text}', style: TextStyle(fontSize: 18)),
-            SizedBox(height: 20),
+            Text('Text: ${message.text}', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 ShareService.shareMessage(message);
               },
-              child: Text('Share'),
+              child: const Text('Share'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _deleteMessage(context),
-              child: Text('Delete'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('Delete'),
             ),
           ],
         ),

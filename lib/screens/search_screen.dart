@@ -38,22 +38,31 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     } else {
       setState(() {
-        _filteredMessages = _allMessages
-            .where((message) =>
-                message.text.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+        _filteredMessages =
+            _allMessages
+                .where(
+                  (message) =>
+                      message.text.toLowerCase().contains(query.toLowerCase()),
+                )
+                .toList();
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Messages'),
+        title: const Text('Search Messages'),
         actions: [
           IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.close),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -68,33 +77,43 @@ class _SearchScreenState extends State<SearchScreen> {
               controller: _searchController,
               decoration: InputDecoration(
                 labelText: 'Search Messages',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.clear),
+                  onPressed: () {
+                    _searchController.clear();
+                    _filterMessages('');
+                  },
+                ),
+                border: const OutlineInputBorder(),
               ),
               onChanged: _filterMessages,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Expanded(
-              child: _filteredMessages.isEmpty
-                  ? Center(child: Text('No messages found.'))
-                  : ListView.builder(
-                      itemCount: _filteredMessages.length,
-                      itemBuilder: (context, index) {
-                        final message = _filteredMessages[index];
-                        return ListTile(
-                          title: Text(message.text),
-                          subtitle: Text(message.timestamp.toString()),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    MessageDetailScreen(message: message),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+              child:
+                  _filteredMessages.isEmpty
+                      ? const Center(child: Text('No messages found.'))
+                      : ListView.builder(
+                        itemCount: _filteredMessages.length,
+                        itemBuilder: (context, index) {
+                          final message = _filteredMessages[index];
+                          return ListTile(
+                            title: Text(message.text),
+                            subtitle: Text(message.timestamp.toString()),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          MessageDetailScreen(message: message),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
             ),
           ],
         ),

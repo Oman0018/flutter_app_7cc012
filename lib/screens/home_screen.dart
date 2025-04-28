@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../helpers/database_helper.dart'; // Ensure correct imports
+import '../helpers/database_helper.dart'; // Database operations
+import '../models/message.dart'; // Message model
 import 'message_detail_screen.dart'; // Detail screen for viewing messages
 import 'create_message_screen.dart'; // Screen for creating new messages
-import '../widgets/home_screen_button.dart'; // Import your reusable button widget
+import '../widgets/home_screen_button.dart'; // Custom reusable button
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,13 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: const Text('Messages')),
       body: Column(
         children: [
-          // Add HomeScreenButton for an extra action (e.g., search or settings)
+          // Reusable button for an extra action (e.g., Search)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: HomeScreenButton(
               label: 'Go to Search Screen',
               onPressed: () {
-                Navigator.pushNamed(context, '/searchScreen'); // Example action
+                Navigator.pushNamed(context, '/searchScreen');
               },
             ),
           ),
@@ -56,10 +57,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    final message = snapshot.data![index];
+                    final messageMap = snapshot.data![index];
+
+                    // Convert the database Map to a Message object
+                    final message = Message(
+                      id: messageMap['id'],
+                      text:
+                          messageMap['text'], // <-- Match your DB column names
+                      imagePath: messageMap['imagePath'],
+                      timestamp: DateTime.parse(messageMap['timestamp']),
+                    );
+
                     return ListTile(
-                      title: Text(message['title']),
-                      subtitle: Text(message['content']),
+                      title: Text(message.text),
+                      subtitle: Text(message.timestamp.toString()),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -83,8 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateMessageScreen()),
-          ).then((_) => _refreshMessages());
+            MaterialPageRoute(
+              builder: (context) => const CreateMessageScreen(),
+            ),
+          ).then(
+            (_) => _refreshMessages(),
+          ); // Refresh after new message created
         },
       ),
     );
