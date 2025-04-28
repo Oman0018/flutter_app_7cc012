@@ -1,16 +1,24 @@
-# flutter_app_7cc012
+# Blogging & Wiki Mobile App (Flutter Project)
 
-A new Flutter project.
+This Flutter application functions as a simple **online/offline blogging**, **wiki**, or **social media client**.
+It allows users to create, view, edit, search, and delete text-based messages with optional image attachments.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📱 Features
 
-A few resources to get you started if this is your first Flutter project:
+- Create new messages with text input.
+- Attach images from the device camera or gallery.
+- View a list of all saved messages.
+- Search through messages by text (live search with clear option).
+- View individual message details.
+- Share messages (text and image) to external apps.
+- Delete single messages or multiple selected messages.
+- Fully offline-first using local **SQLite** storage.
+- Smooth return-to-home functionality.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📂 Project Structure
+...
+(And the full text I shared earlier)
